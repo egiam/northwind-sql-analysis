@@ -2,7 +2,7 @@
 
 Business analysis of the Northwind dataset using PostgreSQL.
 Covers revenue analysis, employee performance, customer behavior,
-supplier insights, and JOIN patterns across multiple tables.
+supplier insights, JOIN patterns, and aggregation techniques.
 
 ## Tech Stack
 - PostgreSQL
@@ -63,6 +63,35 @@ Eight queries demonstrating practical use cases for each JOIN type.
 
 ---
 
+## Day 3 — Aggregations
+
+Eleven queries covering COUNT, SUM, AVG, MIN, MAX with GROUP BY and HAVING.
+
+### Queries
+
+1. **COUNT** — Number of orders per customer
+2. **COUNT + HAVING** — Customers who have placed more than 5 orders
+3. **SUM** — Total revenue per year
+4. **SUM + HAVING** — Product categories that have generated more than $100,000 in revenue
+5. **AVG** — Average order value per employee
+6. **AVG + HAVING** — Employees whose average order value exceeds the overall average
+7. **MIN / MAX** — Earliest and latest order date per customer
+8. **MIN / MAX** — Price range per category
+9. **MIN / MAX** — Cheapest and most expensive product per category (price only — product names require window functions, revisited later)
+10. **COUNT + SUM** — Number of orders and total revenue per country
+11. **Multi-level HAVING** — Suppliers with more than 3 products that have generated over $50,000 in revenue
+
+### Notes
+- WHERE filters rows before grouping; HAVING filters groups after aggregation
+- Query 6 uses a subquery inside HAVING to dynamically calculate the overall
+  average rather than hardcoding a value
+- Query 9 intentionally scoped to price range only — retrieving the specific
+  product name at MIN/MAX price requires window functions
+- Query 11 combines COUNT and SUM conditions in a single HAVING clause
+
+---
+
 ## Files
-- `queries.sql` — Day 1 business analysis queries
-- `joins.sql` — Day 2 JOIN pattern queries
+- `Northwind-SQL-1.sql` — Day 1 business analysis queries
+- `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
+- `Northwind-SQL-3.sql` — Day 3 aggregation queries
