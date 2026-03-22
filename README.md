@@ -91,6 +91,33 @@ Eleven queries covering COUNT, SUM, AVG, MIN, MAX with GROUP BY and HAVING.
 
 ---
 
+## Day 4 — Subqueries and CTEs
+
+The same business question solved three ways to compare readability and structure.
+
+### Business Question
+Which customers have total spending above the average customer spending?
+
+### Versions
+
+1. **Subquery** — Inline subquery inside HAVING to calculate the average dynamically
+2. **CTE** — Order-level revenue defined once as a named CTE, referenced twice
+3. **JOIN** — Average spending calculated as a single-row subquery and joined
+   onto the main query without a key
+
+### Notes
+- All three versions produce identical results
+- CTEs are not faster than subqueries — the advantage is readability
+  and avoiding repetition of the same logic
+- Version 1 writes the order-level revenue subquery twice — exactly
+  the problem CTEs solve
+- Version 3 demonstrates cross-joining a scalar value by omitting ON
+  and using it as a filter condition instead
+- Readability verdict: CTE is the clearest — logic is defined once,
+  named, and the final SELECT reads as plain English
+
+---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
