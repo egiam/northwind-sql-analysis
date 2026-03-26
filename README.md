@@ -118,7 +118,43 @@ Which customers have total spending above the average customer spending?
 
 ---
 
+## Day 5 — StrataScratch Practice (Easy tier)
+
+Five real company interview problems solved on StrataScratch using PostgreSQL.
+
+### Problems
+
+1. **Unique users per client per month** — COUNT DISTINCT + EXTRACT(MONTH)
+2. **Shipments per month** — DATE_TRUNC + composite key counting
+3. **Average bathrooms and bedrooms per city and property type** — AVG + multi-column GROUP BY
+4. **MacBook Pro user event counts** — COUNT + WHERE filter + ORDER BY
+5. **Most profitable financial sector company** — HAVING + correlated subquery
+
+### Mistakes and Lessons
+
+**Problem 1** — Grouped by the full `time_id` date instead of the extracted month.
+Result was one row per day instead of one row per month.
+Fix: `GROUP BY EXTRACT(MONTH FROM time_id)`, not the raw date column.
+
+**Problem 2** — Used `COUNT(shipment_id + sub_id)` to count unique composite keys.
+That adds two numbers together which is meaningless — two different pairs can produce
+the same sum. Correct approaches: `COUNT(DISTINCT (shipment_id, sub_id))` or
+`COUNT(CONCAT(shipment_id, sub_id))`.
+
+### Notes
+- Problem 5 had multiple community solutions that passed the test but were
+  logically wrong — they worked by coincidence because the highest-profit
+  company in the entire dataset happened to be in financials. Always filter
+  the subquery to the same scope as the outer query.
+- The official solution for Problem 5 uses a CTE — same logic as my HAVING
+  version but more readable. Both are correct.
+  
+---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
 - `Northwind-SQL-3.sql` — Day 3 aggregation queries
+- `Northwind-SQL-4.sql` — Day 4 subquery and CTE patterns
+- `Northwind-SQL-5.sql` — Day 5 practice problems with notes on mistakes
+- `Northwind-SQL-6.sql` — Day 6 practice problems with notes on mistakes
