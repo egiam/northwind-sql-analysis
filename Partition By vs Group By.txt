@@ -1,0 +1,46 @@
+In SQL both PARTITION BY and GROUP BY are important clauses used for data aggregation and analysis. Sometimes they work as same but they serve different purposes and are applied in different situations. In this article, we'll understand both of them along with the syntax, multiple examples for both clauses and also the differences between them.
+What is the PARTITION BY Clause?
+
+The PARTITION BY clause is a type of clause that is used with window functions to divide the result set into partitions on which the function is applied. It allows us to perform calculations and aggregations within each partition independently.
+
+Syntax:
+
+SELECT column1, column2, ..., function(column) OVER (PARTITION BY column_name1, column_name2, ...)
+FROM table_name;
+
+Explanation: Here the function(column) is the window function that we want to apply and column_name1, column_name2 are the columns which are used to partition the result set.
+What is GROUP BY Clause?
+
+The GROUP BY clause is used to aggregate data based on one or more columns and group rows with identical values into summary rows. It is widely used via aggregate functions like SUM, COUNT, and AVG to perform calculations on each group.
+
+Syntax:
+
+SELECT column1, column2, aggregate_function(column3)
+FROM table_name
+WHERE condition
+GROUP BY column1, column2;
+
+Explanation:
+
+    column1, column2 are the columns that we want to group by.
+    aggregate_function is the function like SUM, COUNT, AVG, MAX, MIN that we want to apply to the grouped data in column3.
+    table_name is the name of the table.
+    condition is an optional condition to filter the rows before grouping.
+
+Examples of PARTITION BY and GROUP BY
+
+To understand PARTITION BY vs GROUP BY in SQL we need a table on which we will perform various operations and queries. Here we will consider a table called sales which contains product_id, category and sales_amount as Columns.
+
+Query:
+
+CREATE TABLE sales (
+    product_id INT,
+    category VARCHAR(50),
+    sales_amount DECIMAL(10, 2)
+);
+
+INSERT INTO sales (product_id, category, sales_amount) VALUES (1, 'Electronics' , 500);
+INSERT INTO sales (product_id, category, sales_amount) VALUES (2, 'Clothing' , 300);
+INSERT INTO sales (product_id, category, sales_amount) VALUES (3, 'Electronics' , 700);
+INSERT INTO sales (product_id, category, sales_amount) VALUES (4, 'Clothing' , 400);
+INSERT INTO sales (product_id, category, sales_amount) VALUES (5, 'Electronics' , 600);

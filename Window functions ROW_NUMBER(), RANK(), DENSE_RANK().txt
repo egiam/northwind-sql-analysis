@@ -1,0 +1,25 @@
+these three window functions are the go-to tools for ranking rows within a specific set. While they all assign a number to rows based on a sorted order, they handle "ties" (rows with the same value) differently.
+
+1. ROW_NUMBER()
+
+This is the most straightforward function. It assigns a unique, sequential integer to every row, even if the values you are sorting by are identical.
+
+    Behavior: No ties allowed. If two rows are equal, it arbitrarily (or based on sub-sorting) gives one a 1 and the other a 2.
+
+    Best for: Pagination or picking exactly one "top" record from a group.
+
+2. RANK()
+
+This function allows for ties but leaves gaps in the sequence afterward.
+
+    Behavior: If two people tie for 1st place, they both get "1". The next person in line gets "3" because two people are already ahead of them.
+
+    Best for: Traditional sporting ranks where you want to show how many people are actually "better" than the current row.
+
+3. DENSE_RANK()
+
+This also allows for ties but leaves no gaps in the sequence.
+
+    Behavior: If two people tie for 1st place, they both get "1". The next person in line gets "2".
+
+    Best for: When you want a continuous list of distinct rankings (e.g., "What are the top 3 unique salary tiers in the company?").
