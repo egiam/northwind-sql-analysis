@@ -151,6 +151,64 @@ the same sum. Correct approaches: `COUNT(DISTINCT (shipment_id, sub_id))` or
   
 ---
 
+## Day 6 — StrataScratch & HackerRank Practice (Easy tier)
+
+Five problems across StrataScratch and HackerRank reinforcing Week 1 patterns
+under real interview conditions.
+
+### Problems
+
+1. **TBD**
+2. **TBD**
+3. **TBD**
+4. **TBD**
+5. **TBD**
+
+### Mistakes and Lessons
+
+*(to be filled after problems are solved)*
+
+### Notes
+- Community solutions on both platforms are frequently wrong —
+  always validate logic, not just output match
+- StrataScratch problems often have multiple valid approaches;
+  CTE version preferred for readability
+
+---
+
+## Day 7 — Window Functions: ROW_NUMBER, RANK, DENSE_RANK
+
+Introduction to window functions using ranking functions across
+customer revenue and product sales data.
+
+### Queries
+
+1. **ROW_NUMBER / RANK / DENSE_RANK** — All three ranking functions applied
+   to customers by total revenue in a single query to expose tie-breaking behavior
+2. **Products by quantity sold** — Same three functions applied to product sales,
+   written independently without reference
+3. **Per-country customer ranking** — PARTITION BY country added to scope
+   rankings within each country without collapsing rows
+4. **GROUP BY comparison** — Same per-country ranking attempted with GROUP BY
+   alone to demonstrate why window functions exist
+
+### Notes
+- ROW_NUMBER always produces unique values — breaks ties arbitrarily
+- RANK skips numbers after ties — three customers tied for 1st means
+  next rank is 4, not 2
+- DENSE_RANK never skips — three customers tied for 1st means
+  next rank is 2
+- PARTITION BY scopes the window without collapsing rows.
+  GROUP BY collapses rows — you cannot rank within groups without either
+  a window function or a self-join hack. This is the core difference
+  interviewers test.
+- Ties were manufactured using ROUND(revenue, -2) to bucket values —
+  real data in Northwind has no natural revenue ties at customer level
+- `rank` is a reserved word in PostgreSQL — always alias as `rnk`
+  or `country_rank`
+  
+---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
@@ -158,3 +216,4 @@ the same sum. Correct approaches: `COUNT(DISTINCT (shipment_id, sub_id))` or
 - `Northwind-SQL-4.sql` — Day 4 subquery and CTE patterns
 - `Northwind-SQL-5.sql` — Day 5 practice problems with notes on mistakes
 - `Northwind-SQL-6.sql` — Day 6 practice problems with notes on mistakes
+- `Rank-and-DenseRank-PartitionBy.sql` — Day 7 window function ranking queries
