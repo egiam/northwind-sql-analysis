@@ -209,6 +209,36 @@ customer revenue and product sales data.
   
 ---
 
+## Day 8 — Window Functions: LAG, LEAD, Running Totals
+
+Time-series analysis using offset and cumulative window functions
+on Northwind monthly revenue data.
+
+### Queries
+
+1. **LAG — Month-over-month revenue change** — Previous month revenue and
+   percentage growth calculated using LAG(revenue, 1)
+2. **LEAD — Next month revenue** — Forward-looking offset using LEAD(revenue, 1)
+   to access the following month's value
+3. **Running total** — Cumulative revenue across all months using
+   SUM() OVER (ORDER BY month)
+
+### Notes
+- First row of LAG query returns NULL for prev_month_rev — no prior row exists
+- Last row of LEAD query returns NULL for next_month_rev — no following row exists
+- LEAD with a MoM growth formula is syntactically valid but analytically
+  meaningless — MoM growth is a LAG question. LEAD's real use case is
+  time-to-next-event analysis
+- SUM() OVER (ORDER BY month) defaults to frame ROWS BETWEEN UNBOUNDED
+  PRECEDING AND CURRENT ROW — each row accumulates all revenue up to
+  and including itself
+- PostgreSQL ROUND with precision requires ::numeric cast —
+  ROUND(expression::numeric, 2). Double precision will throw error 42883.
+- DATE_TRUNC('month', date_column) truncates to the first of the month —
+  standard pattern for time series grouping
+  
+---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
@@ -217,3 +247,4 @@ customer revenue and product sales data.
 - `Northwind-SQL-5.sql` — Day 5 practice problems with notes on mistakes
 - `Northwind-SQL-6.sql` — Day 6 practice problems with notes on mistakes
 - `Rank-and-DenseRank-PartitionBy.sql` — Day 7 window function ranking queries
+- `LAG-LEAD-SUM.sql` — Day 8 LAG, LEAD, and running total queries
