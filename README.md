@@ -239,6 +239,42 @@ on Northwind monthly revenue data.
   
 ---
 
+## Day 9 — Query Optimization and EXPLAIN ANALYZE
+
+Reading and interpreting PostgreSQL query plans on existing Northwind queries.
+
+### Queries Analyzed
+
+1. **Customer ranking query** — Window function query from Day 7
+2. **Anti-join query** — Customers who have never ordered from Day 2
+3. **LAG MoM revenue query** — Time series query from Day 8
+
+### Key Findings
+
+1. **Customer ranking** — Hash Join on order_details and orders, perfect row
+   estimate (89 estimated vs 89 actual). Execution time 1.2ms.
+2. **Anti-join** — PostgreSQL rewrote LEFT JOIN to Hash Right Join internally.
+   Slight row mismatch (1 estimated vs 2 actual) — harmless at this scale.
+3. **LAG MoM query** — Bad row estimate (480 estimated vs 23 actual) caused by
+   DATE_TRUNC producing a derived column with no statistics. Harmless at toy
+   scale, dangerous on production tables with millions of rows.
+
+### Notes
+- EXPLAIN estimates without running. EXPLAIN ANALYZE runs and shows real numbers.
+  Always use ANALYZE when you want truth.
+- Read query plans bottom-up — innermost node executes first
+- cost=X..Y means startup cost .. total cost. Relative units, not milliseconds.
+- Estimated rows vs actual rows is the most important signal in a query plan.
+  A large mismatch means PostgreSQL is flying blind and may choose wrong strategies.
+- Derived columns (DATE_TRUNC, ROUND, expressions) have no statistics —
+  PostgreSQL always guesses on these.
+- All three queries used Seq Scans. Indexes were not added — Northwind is too
+  small for indexes to change execution plans. PostgreSQL correctly determines
+  that scanning 830 rows directly is cheaper than index lookup overhead.
+  Indexes matter at scale, not on toy datasets.
+  
+---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
@@ -248,3 +284,4 @@ on Northwind monthly revenue data.
 - `Northwind-SQL-6.sql` — Day 6 practice problems with notes on mistakes
 - `Rank-and-DenseRank-PartitionBy.sql` — Day 7 window function ranking queries
 - `LAG-LEAD-SUM.sql` — Day 8 LAG, LEAD, and running total queries
+- `Analyze.sql` — Day 9 EXPLAIN ANALYZE query plan analysis
