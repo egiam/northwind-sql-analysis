@@ -272,8 +272,33 @@ Reading and interpreting PostgreSQL query plans on existing Northwind queries.
   small for indexes to change execution plans. PostgreSQL correctly determines
   that scanning 830 rows directly is cheaper than index lookup overhead.
   Indexes matter at scale, not on toy datasets.
-  
+
 ---
+
+## Day 10 — Chained CTEs
+
+Multi-step query using three chained CTEs to calculate month-over-month
+revenue growth, where each CTE depends on the previous one's output.
+
+### Query
+
+**Month-over-month revenue growth via chained CTEs**
+- CTE 1 — Monthly revenue aggregated from order_details and orders
+- CTE 2 — Pulls from CTE 1, adds LAG to get previous month revenue
+- CTE 3 — Pulls from CTE 2, calculates MoM growth percentage
+
+### Notes
+- Each CTE references only the previous CTE — that's what makes it a chain,
+  not three independent CTEs sitting next to each other
+- GROUP BY only belongs in CTEs that perform aggregation. CTEs that only
+  select, filter, or apply window functions do not need GROUP BY.
+- This pattern maps directly to how dbt models are structured —
+  each model builds on the previous one's output
+- Over-engineered for this dataset intentionally — the point is practicing
+  the pattern, not optimizing the query
+  
+
+  ---
 
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
@@ -285,3 +310,4 @@ Reading and interpreting PostgreSQL query plans on existing Northwind queries.
 - `Rank-and-DenseRank-PartitionBy.sql` — Day 7 window function ranking queries
 - `LAG-LEAD-SUM.sql` — Day 8 LAG, LEAD, and running total queries
 - `Analyze.sql` — Day 9 EXPLAIN ANALYZE query plan analysis
+- `CTE-concatenated.sql` — Day 10 chained CTE MoM growth query
