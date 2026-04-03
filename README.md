@@ -297,7 +297,53 @@ revenue growth, where each CTE depends on the previous one's output.
 - Over-engineered for this dataset intentionally — the point is practicing
   the pattern, not optimizing the query
   
+---
 
+## Day 11 — StrataScratch Medium Tier Practice
+
+Five medium-level interview problems covering conditional aggregation,
+self-joins, and multi-table logic.
+
+### Problems
+
+1. **US open user percentage** — Percentage of users from USA with open status
+2. **Number permutations** — All pairs via CROSS JOIN with GREATEST() per pair
+3. **Unique users per flagged video** — COUNT DISTINCT composite key with NULL handling
+4. **Managers below twice report average** — Double JOIN on same table, HAVING filter
+5. **Department growth post-2020** — WHERE date filter, HAVING headcount threshold
+
+### Mistakes and Lessons
+
+**Problem 1** — Integer division returns 0 before multiplying by 100.
+Fix: cast numerator to numeric before dividing.
+`count::numeric / total * 100` not `count / total * 100`
+
+**Problem 1** — Mixed scalar CTE column with aggregate in SELECT causes
+GroupingError. Fix: wrap scalar in MAX() when mixing with COUNT().
+
+**Problem 2** — Dense academic wording disguising a simple CROSS JOIN.
+Strip any problem to: what are the inputs, what does one output row look like.
+
+**Problem 3** — CONCAT without separator causes false deduplication.
+`CONCAT(firstname, lastname)` → 'John' + '' = 'Jo' + 'hn' = 'John'.
+Fix: always use a separator. `CONCAT(firstname, '|', lastname)`
+
+**Problem 4** — Compared manager salary against company-wide average
+instead of per-manager average. Required joining dim_employee twice
+with different aliases — once for manager role, once for employee role.
+
+### Notes
+- `SUM(CASE WHEN condition THEN 1 ELSE 0 END)` — conditional counting pattern.
+  Counts a subset without filtering out the rest of the data. Use this constantly.
+- `GREATEST(a, b)` returns the largest value across columns in the same row.
+  Different from MAX() which aggregates across rows.
+- Joining the same table twice with different aliases is a core pattern
+  for hierarchical or role-based data. Write it cold.
+- HAVING fires after aggregation. Any filter involving an aggregate
+  belongs in HAVING, not WHERE.
+- Medium tier wording is often deliberately complex. The SQL is rarely
+  as hard as the description suggests.
+  
   ---
 
 ## Files
@@ -311,3 +357,4 @@ revenue growth, where each CTE depends on the previous one's output.
 - `LAG-LEAD-SUM.sql` — Day 8 LAG, LEAD, and running total queries
 - `Analyze.sql` — Day 9 EXPLAIN ANALYZE query plan analysis
 - `CTE-concatenated.sql` — Day 10 chained CTE MoM growth query
+- `Northwind-SQL-11.sql` — Day 11 medium tier practice problems
