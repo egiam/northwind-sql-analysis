@@ -346,6 +346,41 @@ with different aliases — once for manager role, once for employee role.
   
   ---
 
+## Day 12 — Business Questions Portfolio (Week 2 Capstone)
+
+Five business questions answered using the full Week 2 SQL toolkit:
+window functions, chained CTEs, LAG, and conditional logic.
+
+### Business Questions
+
+1. **Top 10 customers by total revenue** — Aggregated revenue with ORDER BY
+   and LIMIT
+2. **Month-over-month order growth** — COUNT of orders per month with LAG
+   and growth percentage using window functions
+3. **Declining vs growing product categories** — Yearly revenue per category
+   using LAG with PARTITION BY category, growth percentage, and CASE WHEN
+   trend label
+4. **Average order value by country** — Order-level aggregation via CTE
+   before averaging across countries
+5. **Employee sales: 1998 vs 1997** — Revenue per employee per year using
+   LAG with PARTITION BY employee, filtered to 1998 after window calculation
+
+### Notes
+- Q5 treats 1998 as current year and 1997 as prior year — Northwind data
+  ends mid-1998. Documented intentionally.
+- Q4 aggregates to order level first before averaging — averaging raw
+  order_details rows produces line item average, not order value average
+- Q3 uses chained CTEs: CTE 1 aggregates yearly revenue per category,
+  CTE 2 calculates LAG and growth percentage, final SELECT applies
+  CASE WHEN trend label. CASE WHEN references the alias not the repeated
+  expression.
+- Window function filters must happen after the window runs — filter on
+  year in the outer SELECT, not inside the CTE, or LAG loses its lookback rows
+- Integer division silently returns 0 — always cast numerator to ::numeric
+  before dividing counts or integers
+  
+  ---
+
 ## Files
 - `Northwind-SQL-1.sql` — Day 1 business analysis queries
 - `Northwind-SQL-2.sql` — Day 2 JOIN pattern queries
@@ -358,3 +393,4 @@ with different aliases — once for manager role, once for employee role.
 - `Analyze.sql` — Day 9 EXPLAIN ANALYZE query plan analysis
 - `CTE-concatenated.sql` — Day 10 chained CTE MoM growth query
 - `Northwind-SQL-11.sql` — Day 11 medium tier practice problems
+- `Northwind-SQL-12.sql` — Day 12 five business questions portfolio artifact
